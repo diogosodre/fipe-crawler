@@ -196,9 +196,15 @@ class Crawler
         $url     = self::$urls['modelos'];
         $tmp     = json_decode($this->httpPost($url, $params));
         $records = array();
+ // ==========================================================
+    //  ADD THIS CHECK TO PREVENT CRASHES
+    // ==========================================================
+    if (is_object($tmp) && property_exists($tmp, 'Modelos')) {
         foreach ($tmp->Modelos as $t) {
             $records[$t->Value] = $t->Label;
         }
+    }
+    // ==========================================================
 
         return $records;
     }
@@ -435,7 +441,18 @@ class Crawler
         $modelos = $this->getModelos($tabelaId, $tipo, $marcaId);
         $results = array();
         foreach ($modelos as $id => $modelo) {
-            $results[] = array(
+
+	// ==========================================================
+        //  CÓDIGO DE DEBUG ATUALIZADO
+        // ==========================================================
+        if ($marcaId == 43) { // Usando o ID correto para Nissan
+            if (stripos($modelo, 'KICKS') !== false) {
+                echo "DEBUG: Encontrei um Kicks -> ID: $id, Nome: $modelo \n";
+            }
+        }
+        // ==========================================================
+        
+	    $results[] = array(
                 'id'         => $id,
                 'lbl'        => $modelo,
                 'tipo'       => $tipo,
@@ -518,7 +535,7 @@ class Crawler
                 'anomod'     => trim($veiculo['AnoModelo']),
                 'comb_cod'   => $comb,
                 'comb_sigla' => trim($veiculo['SiglaCombustivel']),
-                'comb'       => Database::$combustiveis[$comb],
+                'comb'       => Database::$combustiveis[$comb] ?? 'Desconhecido',
                 'valor'      => $valor,
             );
         }

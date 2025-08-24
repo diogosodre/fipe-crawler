@@ -59,7 +59,9 @@ class Database
         1 => 'Gasolina',
         2 => 'Álcool',
         3 => 'Diesel',
-        4 => 'Flex',
+        4 => 'Elétrico',
+	5 => 'Flex',
+	6 => 'Híbrido',
     );
 
     /**

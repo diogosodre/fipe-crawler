@@ -12,3 +12,4 @@ config/config.php
 *.swp
 composer.phar
 composer
+fipe2
